@@ -15,20 +15,17 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: #222;
   }
-  /* ---- The sticker: a square 3M Post-it, side follows screen width ---- */
   .sticker {
     position: relative;
     width: min(92vw, 520px, calc(100dvh - 48px));
     aspect-ratio: 1 / 1;
     transform: rotate(-1.5deg);
     background:
-      /* subtle paper fiber noise */
       url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"),
       repeating-linear-gradient(90deg, rgba(255,255,255,.07) 0 2px, transparent 2px 6px),
       repeating-linear-gradient(0deg, rgba(0,0,0,.025) 0 1px, transparent 1px 4px),
       linear-gradient(175deg, #ffedb0 0%, #ffe671 42%, #ffd94a 100%);
     border-radius: 3px;
-    /* layered shadows: contact + mid + soft ambient */
     box-shadow:
       0 1px 1px rgba(0,0,0,.12),
       0 4px 8px rgba(0,0,0,.10),
@@ -41,7 +38,6 @@
     position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
     padding: 40px 24px 34px; scrollbar-width: thin;
   }
-  /* Tape strip holding the sticker to the desk */
   .tape {
     position: absolute; top: -13px; left: 50%; width: 92px; height: 28px; z-index: 3;
     transform: translateX(-50%) rotate(-3deg);
@@ -49,7 +45,6 @@
     border-left: 1px dashed rgba(0,0,0,.10); border-right: 1px dashed rgba(0,0,0,.10);
     box-shadow: 0 2px 4px rgba(0,0,0,.14); pointer-events: none;
   }
-  /* Folded-up bottom-right corner – slightly softer */
   .sticker::after {
     content: ""; position: absolute; right: 0; bottom: 0; width: 36px; height: 36px; z-index: 3;
     background: linear-gradient(315deg, transparent 48%, rgba(0,0,0,.10) 49.5%, rgba(0,0,0,.06) 50.5%, #fff3a3 52%);
@@ -58,7 +53,6 @@
   }
   .st-month { font-size: 22px; font-weight: bold; letter-spacing: .3px; }
   .st-balance-label { font-size: 15px; opacity: .75; margin-top: 8px; }
-  /* Long balances wrap instead of overflowing. */
   .st-balance {
     font-size: clamp(22px, 9vw, 38px);
     font-weight: bold;
@@ -97,7 +91,6 @@
   .lrow .lt { font-size: 15px; }
   .lrow .lm { font-size: 14px; opacity: .8; margin-top: 2px; line-height: 1.4; word-break: break-word; }
   .lrow .la { font-size: 16px; font-weight: bold; margin-top: 2px; }
-  /* ---- Corner buttons: Exit (left), c and ? (right) ---- */
   .st-corner {
     position: absolute; top: 8px; z-index: 4; font-family: inherit; color: #2a2410;
     background: rgba(255,255,255,.65); border: 1px solid rgba(90,70,0,.35);
@@ -105,9 +98,10 @@
     transition: transform .1s ease, background .12s ease, box-shadow .12s ease;
   }
   #btn-exit { left: 12px; padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: bold; }
-  #btn-help { right: 12px; width: 28px; height: 28px; border-radius: 50%; font-size: 16px; font-weight: bold; padding: 0; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
-  #btn-copy { right: 48px; width: 28px; height: 28px; border-radius: 50%; font-size: 16px; font-weight: bold; padding: 0; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
-  /* ---- Borderless entry toggles: tap to expand the form in place ---- */
+  #btn-help, #btn-copy { width: 28px; height: 28px; border-radius: 50%; font-size: 16px; font-weight: bold; padding: 0; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  #btn-help { right: 12px; }
+  #btn-copy { right: 48px; }
+  .st-ver { position: absolute; left: 14px; bottom: 9px; z-index: 4; font-size: 11px; opacity: .55; pointer-events: none; }
   .st-toggle {
     display: flex; justify-content: space-between; align-items: center; width: 100%;
     background: none; border: none; padding: 2px 0; cursor: pointer;
@@ -116,20 +110,17 @@
   .st-toggle .chev { font-size: 14px; }
   .st-body { display: none; margin-top: 10px; }
   .st-body.open { display: block; }
-  /* ---- Small per-record Delete button ---- */
   .ldel {
     font-family: inherit; font-size: 12px; font-weight: normal; color: #2a2410;
     background: rgba(255,255,255,.5); border: 1px solid rgba(90,70,0,.30); border-radius: 6px;
     padding: 2px 7px; margin-left: 8px; cursor: pointer;
   }
-  /* ---- Exit screen: blank, with only a Reopen button ---- */
   #exit-screen {
     position: fixed; inset: 0; background: #d9d2c2; z-index: 80;
     display: none; align-items: center; justify-content: center;
     cursor: pointer;
   }
   #exit-screen.open { display: flex; }
-  /* ---- Confirm popup: on demand only, never automatic ---- */
   #confirm-overlay, #help-overlay, #adjust-overlay {
     position: fixed; inset: 0; background: rgba(10,10,10,.55); z-index: 60;
     display: none; align-items: center; justify-content: center; padding: 20px;
@@ -141,8 +132,9 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   .dlg h2 { margin: 0 0 10px; font-size: 20px; }
-  .dlg p { line-height: 1.5; color: #333; font-size: 15px; margin: 0 0 10px; word-break: break-word; }
-  #help-overlay ol { text-align: left; margin: 0 0 10px; padding-left: 22px; line-height: 1.5; color: #333; font-size: 15px; }
+  .dlg p, #help-overlay ol { line-height: 1.5; color: #333; font-size: 15px; }
+  .dlg p { margin: 0 0 10px; word-break: break-word; }
+  #help-overlay ol { text-align: left; margin: 0 0 10px; padding-left: 22px; }
   #help-overlay li { margin-bottom: 6px; }
   .dlg .btns { display: flex; gap: 8px; margin-top: 14px; }
   .dlg input[type="text"] {
@@ -218,6 +210,7 @@
       <div id="ledger-list"></div>
     </div>
   </div>
+  <div class="st-ver" id="st-ver"></div>
 </div>
 
 <div id="confirm-overlay" role="presentation">
@@ -270,10 +263,13 @@
 <script>
 (function () {
 'use strict';
-/* Personal ledger: one self-contained file, fully offline. The ledger
-   stays in this browser's localStorage. Nothing is sent anywhere. */
+/* Personal ledger: single file, offline, localStorage only. */
 
 function $(id) { return document.getElementById(id); }
+/* Bump on every release; shown on the sticker and in the tab title so a stale cached copy is obvious. */
+var APP_VERSION = 'v30';
+document.title = 'Personal ledger · Offline ' + APP_VERSION;
+$('st-ver').textContent = APP_VERSION;
 function esc(s) {
   return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -305,7 +301,6 @@ function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
-/* ---- Toast: small floating message ---- */
 var toastTimer = null;
 function toast(msg, isErr) {
   var t = $('toast');
@@ -315,14 +310,13 @@ function toast(msg, isErr) {
   toastTimer = setTimeout(function () { t.className = ''; }, 2600);
 }
 
-/* ---- Storage: localStorage only ---- */
 var LS_RECORDS = 'finance-personal-v1:records';
 var LS_OPENING = 'finance-personal-v1:opening';
 var LS_CARRY = 'finance-personal-v1:carry';
 var LS_AUTO1 = 'finance-personal-v1:auto-backup';
 var LS_AUTO2 = 'finance-personal-v1:auto-backup-prev';
 /* Money is calculated in integer cents. */
-var MAX_MONEY = 2000; // hard ceiling per balance/entry: CA$2,000
+var MAX_MONEY = 2000; // CA$2,000 ceiling
 var MAX_RECORDS = 50;
 var MAX_MEMO = 20;
 var storageBlocked = false;
@@ -334,6 +328,16 @@ function toCents(v, limit) {
   return Number.isSafeInteger(c) ? c : null;
 }
 function fromCents(c) { return c / 100; }
+function recLimit(r) { return r.type === 'adjustment' ? MAX_MONEY * 2 : MAX_MONEY; }
+function signedCents(r) {
+  var c = toCents(r.amount, recLimit(r));
+  return r.type === 'expense' ? -c : c;
+}
+function byChrono(a, b) {
+  if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+  if (a.createdAt !== b.createdAt) return a.createdAt < b.createdAt ? -1 : 1;
+  return 0;
+}
 function normalizeMoney(v) {
   var c = toCents(v);
   return c === null ? 0 : fromCents(c);
@@ -363,8 +367,7 @@ function validDateString(ds) {
 function isValidRecord(r) {
   if (!r || (r.type !== 'income' && r.type !== 'expense' && r.type !== 'adjustment')) return false;
   if (!validDateString(r.date)) return false;
-  var amountLimit = r.type === 'adjustment' ? MAX_MONEY * 2 : MAX_MONEY;
-  var cents = toCents(r.amount, amountLimit);
+  var cents = toCents(r.amount, recLimit(r));
   if (cents === null) return false;
   if (typeof r.id !== 'string' || !r.id || r.id.length > 128) return false;
   if (r.memo !== undefined && (typeof r.memo !== 'string' || r.memo.length > MAX_MEMO)) return false;
@@ -384,7 +387,7 @@ function isMoneyValue(v) { return toCents(v) !== null; }
 function normalizeRecords(list) {
   if (!Array.isArray(list)) return [];
   return list.map(function (r) {
-    return { id: r.id, type: r.type, date: r.date, amount: fromCents(toCents(r.amount, r.type === 'adjustment' ? MAX_MONEY * 2 : MAX_MONEY)),
+    return { id: r.id, type: r.type, date: r.date, amount: fromCents(toCents(r.amount, recLimit(r))),
       memo: (typeof r.memo === 'string') ? r.memo : '',
       createdAt: (typeof r.createdAt === 'string') ? r.createdAt : '' };
   });
@@ -396,7 +399,7 @@ function normalizeSnapshot(s) {
 }
 function ledgerWithinLimit(list, op, ca) {
   var cents = toCents(op) + toCents(ca || 0);
-  list.forEach(function (r) { var a = toCents(r.amount, r.type === 'adjustment' ? MAX_MONEY * 2 : MAX_MONEY); cents += r.type === 'expense' ? -a : a; });
+  list.forEach(function (r) { cents += signedCents(r); });
   return Number.isSafeInteger(cents) && Math.abs(cents) <= MAX_MONEY * 100;
 }
 function isValidSnapshot(s) {
@@ -463,7 +466,6 @@ function parsePart(raw, fallback) {
   try { return { missing: false, corrupt: false, value: JSON.parse(raw) }; }
   catch (e) { return { missing: false, corrupt: true, value: fallback }; }
 }
-/* ---- State: validated at startup, restored from backup if damaged ---- */
 var bootRecordsP = parsePart(readRawPart(LS_RECORDS), []);
 var bootOpeningP = parsePart(readRawPart(LS_OPENING), null);
 var bootCarryP = parsePart(readRawPart(LS_CARRY), null);
@@ -482,15 +484,16 @@ var recoveredFromBackup = false;
   var recordsOk = bootRecordsP.missing || (!bootRecordsP.corrupt && isValidRecords(bootRecordsP.value));
   var openingOk = bootOpeningP.missing || (!bootOpeningP.corrupt && isMoneyValue(bootOpeningP.value));
   var carryOk = bootCarryP.missing || (!bootCarryP.corrupt && isMoneyValue(bootCarryP.value));
-  var candidateRecords = recordsOk ? (bootRecordsP.missing ? [] : bootRecordsP.value) : [];
-  var candidateOpening = openingOk && !bootOpeningP.missing ? bootOpeningP.value : 0;
-  var candidateCarry = carryOk && !bootCarryP.missing ? bootCarryP.value : 0;
-  if (recordsOk && openingOk && carryOk && ledgerWithinLimit(candidateRecords, candidateOpening, candidateCarry)) return;
+  if (recordsOk && openingOk && carryOk && ledgerWithinLimit(records, opening, carry)) return;
   var snap = readAuto(LS_AUTO1) || readAuto(LS_AUTO2);
-  if (snap && commitBundle((function () { var v = {}; v[LS_RECORDS] = snap.records; v[LS_OPENING] = snap.opening; v[LS_CARRY] = snap.carry; return v; })())) {
-    records = snap.records; opening = snap.opening; openingSet = true; carry = snap.carry;
-    recoveredFromBackup = true;
-    return;
+  if (snap) {
+    var values = {};
+    values[LS_RECORDS] = snap.records; values[LS_OPENING] = snap.opening; values[LS_CARRY] = snap.carry;
+    if (commitBundle(values)) {
+      records = snap.records; opening = snap.opening; openingSet = true; carry = snap.carry;
+      recoveredFromBackup = true;
+      return;
+    }
   }
   dataBroken = true;
   storageBlocked = true;
@@ -502,13 +505,9 @@ var recoveredFromBackup = false;
   } catch (e) {}
 })();
 
-/* ---- Balance and ledger: one model feeds the screen ---- */
 function balanceTotal() {
   var cents = toCents(opening) + toCents(carry);
-  records.forEach(function (r) {
-    var c = toCents(r.amount, r.type === 'adjustment' ? MAX_MONEY * 2 : MAX_MONEY);
-    cents += r.type === 'expense' ? -c : c;
-  });
+  records.forEach(function (r) { cents += signedCents(r); });
   return fromCents(cents);
 }
 function typeLabel(t) {
@@ -521,25 +520,13 @@ function signedAmount(r) {
   return (r.type === 'income' ? '+' : '-') + fmtMoney(r.amount);
 }
 function ledgerModel() {
-  var chrono = records.slice().sort(function (a, b) {
-    if (a.date !== b.date) return a.date < b.date ? -1 : 1;
-    if (a.createdAt !== b.createdAt) return a.createdAt < b.createdAt ? -1 : 1;
-    return 0;
-  });
-  var runCents = toCents(opening);
-  var run = fromCents(runCents);
+  var chrono = records.slice().sort(byChrono);
+  var runCents = toCents(opening) + toCents(carry);
   var rows = [];
-  if (openingSet) rows.push({ kind: 'opening', run: run });
-  if (carry !== 0) {
-    runCents += toCents(carry);
-    run = fromCents(runCents);
-    rows.push({ kind: 'carry', run: run });
-  }
+  if (carry !== 0) rows.push({ kind: 'carry', run: fromCents(runCents) });
   chrono.forEach(function (r) {
-    var amountCents = toCents(r.amount, r.type === 'adjustment' ? MAX_MONEY * 2 : MAX_MONEY);
-    runCents += (r.type === 'expense' ? -amountCents : amountCents);
-    run = fromCents(runCents);
-    rows.push({ kind: 'record', rec: r, run: run });
+    runCents += signedCents(r);
+    rows.push({ kind: 'record', rec: r, run: fromCents(runCents) });
   });
   return rows;
 }
@@ -549,7 +536,7 @@ function render() {
   $('sec-opening').style.display = openingSet ? 'none' : 'block';
   var list = $('ledger-list');
   list.innerHTML = '';
-  var rows = ledgerModel().filter(function (row) { return row.kind !== 'opening'; }).reverse(); /* newest first */
+  var rows = ledgerModel().reverse(); /* newest first */
   if (!rows.length) {
     list.innerHTML = '<div class="small">No records yet.</div>';
     return;
@@ -582,7 +569,7 @@ function render() {
   });
 }
 
-/* ---- Retention: at most 36 days, older records auto-delete into carry ---- */
+/* Retention: at most 36 days; older records fold into carry. */
 function cutoff36() {
   var d = new Date();
   d.setDate(d.getDate() - 36);
@@ -596,8 +583,7 @@ function runRetentionCleanup() {
   records.forEach(function (r) {
     if (r.date < cutoff) {
       dropped++;
-      var c = toCents(r.amount, r.type === 'adjustment' ? MAX_MONEY * 2 : MAX_MONEY);
-      droppedCents += r.type === 'expense' ? -c : c;
+      droppedCents += signedCents(r);
     } else keep.push(r);
   });
   if (!dropped) { lastRetentionDate = today; return false; }
@@ -611,16 +597,11 @@ function runRetentionCleanup() {
   return true;
 }
 
-/* ---- Full ledger: fold the oldest record into "Carried forward" (balance unchanged) ---- */
+/* Full ledger: fold the oldest record into carry (balance unchanged). */
 function makeRoom() {
   if (records.length < MAX_RECORDS) return false;
-  var oldest = records.slice().sort(function (a, b) {
-    if (a.date !== b.date) return a.date < b.date ? -1 : 1;
-    if (a.createdAt !== b.createdAt) return a.createdAt < b.createdAt ? -1 : 1;
-    return 0;
-  })[0];
-  var c = toCents(oldest.amount, oldest.type === 'adjustment' ? MAX_MONEY * 2 : MAX_MONEY);
-  var nextCents = toCents(carry) + (oldest.type === 'expense' ? -c : c);
+  var oldest = records.slice().sort(byChrono)[0];
+  var nextCents = toCents(carry) + signedCents(oldest);
   if (!Number.isSafeInteger(nextCents) || Math.abs(nextCents) > MAX_MONEY * 100) return null;
   var keep = records.filter(function (x) { return x.id !== oldest.id; });
   var nextCarry = fromCents(nextCents), values = {};
@@ -631,7 +612,6 @@ function makeRoom() {
 }
 var FULL_MSG = 'Record limit reached (50) and the oldest record could not be archived. Export a backup before continuing.';
 
-/* ---- Confirm every entry before it is recorded ---- */
 var draft = null;
 function focusSoon(id) { setTimeout(function () { $(id).focus(); }, 30); }
 function closeOnBackdrop(overlayId, closeFn) {
@@ -649,7 +629,9 @@ function closeConfirm() {
   draft = null;
 }
 function failSave() { closeConfirm(); toast('Save failed. Please try again.', true); }
-/* Clean a typed amount and return the number, or NaN when it is not a number at all (no limit check here). */
+/* Close the dialog, re-render, and show the result message. */
+function finish(closeFn, msg) { closeFn(); render(); toast(msg); }
+/* Typed amount to number, no limit check. */
 function parseNumber(raw) {
   var t = String(raw).replace(/[\s\u00a0]/g, '').replace(/^\+/, '');
   if (/^-?\d+,\d{1,2}$/.test(t)) t = t.replace(',', '.');
@@ -669,7 +651,7 @@ function parseEntryAmount(raw) {
   var amount = parseAmount(raw);
   return (!isFinite(amount) || amount <= 0 || toCents(amount) === null) ? null : amount;
 }
-/* Error message for an unusable entry amount: over the limit gets the limit message, the rest get the greater-than-zero message. */
+/* Entry error: over the limit gets the limit message. */
 function entryAmountError(raw) {
   var n = parseNumber(raw);
   return (n > 0) ? 'Enter a valid amount up to CA$2,000.' : 'Please enter an amount greater than zero.';
@@ -695,23 +677,17 @@ $('btn-opening').addEventListener('click', function () {
   draft = { type: 'opening', amount: amount };
   openConfirm('Set the opening balance to <b>' + esc(fmtMoney(amount)) + '</b>');
 });
-$('btn-add').addEventListener('click', function () {
+function submitEntry(type, amountId, memoId, verb) {
   if (!canMutate()) return;
-  var amount = parseEntryAmount($('add-amount').value.trim());
-  if (amount === null) { toast(entryAmountError($('add-amount').value.trim()), true); return; }
-  draft = { type: 'income', amount: amount, memo: $('inc-memo').value.trim() };
-  openConfirm('Add income of <b>' + esc(fmtMoney(amount)) + '</b>' +
+  var raw = $(amountId).value.trim();
+  var amount = parseEntryAmount(raw);
+  if (amount === null) { toast(entryAmountError(raw), true); return; }
+  draft = { type: type, amount: amount, memo: $(memoId).value.trim() };
+  openConfirm(verb + ' of <b>' + esc(fmtMoney(amount)) + '</b>' +
     (draft.memo ? '<br>Memo: ' + esc(draft.memo) : ''));
-});
-$('btn-expense').addEventListener('click', function () {
-  if (!canMutate()) return;
-  var amount = parseEntryAmount($('exp-amount').value.trim());
-  if (amount === null) { toast(entryAmountError($('exp-amount').value.trim()), true); return; }
-  draft = { type: 'expense', amount: amount, memo: $('exp-memo').value.trim() };
-  openConfirm('Add expense of <b>' + esc(fmtMoney(amount)) + '</b>' +
-    (draft.memo ? '<br>Memo: ' + esc(draft.memo) : ''));
-});
-/* ---- Entry toggles: borderless buttons expand the form in place, one at a time ---- */
+}
+$('btn-add').addEventListener('click', function () { submitEntry('income', 'add-amount', 'inc-memo', 'Add income'); });
+$('btn-expense').addEventListener('click', function () { submitEntry('expense', 'exp-amount', 'exp-memo', 'Add expense'); });
 function syncToggleChevrons() {
   var incOpen = $('body-income').classList.contains('open');
   var expOpen = $('body-expense').classList.contains('open');
@@ -728,7 +704,6 @@ function toggleEntry(which) {
   exp.classList.remove('open');
   if (willOpen) {
     target.classList.add('open');
-    // Auto-focus the amount field for faster entry
     setTimeout(function () {
       var focusId = which === 'income' ? 'add-amount' : 'exp-amount';
       var el = $(focusId);
@@ -747,7 +722,6 @@ function openHelp() {
 }
 function closeHelp() { $('help-overlay').classList.remove('open'); }
 $('btn-help').addEventListener('click', openHelp);
-/* Balance number opens the adjust dialog (single tap / click) */
 $('st-balance').addEventListener('click', function () {
   openAdjust();
 });
@@ -770,7 +744,6 @@ $('btn-reopen').addEventListener('click', function (e) {
   e.stopPropagation();
   reopen();
 });
-/* Whole exit screen is tappable to reopen */
 $('exit-screen').addEventListener('click', reopen);
 $('exit-screen').addEventListener('keydown', function (e) {
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reopen(); }
@@ -789,10 +762,7 @@ $('btn-confirm').addEventListener('click', function () {
       failSave(); return;
     }
     autoBackup();
-    closeConfirm();
-    render();
-    toast('Opening balance set.');
-    return;
+    return finish(closeConfirm, 'Opening balance set.');
   }
   if (draft.type === 'import') {
     var sn = draft.snap;
@@ -801,14 +771,10 @@ $('btn-confirm').addEventListener('click', function () {
     records = sn.records; opening = sn.opening; carry = sn.carry; openingSet = true;
     storageBlocked = false; crossTabConflict = false;
     autoBackup();
-    closeConfirm();
-    render();
-    toast('Backup imported.');
-    return;
+    return finish(closeConfirm, 'Backup imported.');
   }
   if (draft.type === 'delete') {
-    var idx = -1;
-    for (var i = 0; i < records.length; i++) { if (records[i].id === draft.id) { idx = i; break; } }
+    var idx = records.findIndex(function (r) { return r.id === draft.id; });
     if (idx < 0) { closeConfirm(); toast('That entry is already gone.'); return; }
     var remaining = records.filter(function (x) { return x.id !== draft.id; });
     if (!ledgerWithinLimit(remaining, opening, carry)) {
@@ -823,10 +789,7 @@ $('btn-confirm').addEventListener('click', function () {
       failSave(); return;
     }
     autoBackup();
-    closeConfirm();
-    render();
-    toast('Entry deleted.');
-    return;
+    return finish(closeConfirm, 'Entry deleted.');
   }
   if (dupBlocked([draft.type, draft.amount, todayStr(), draft.memo].join('|'))) return;
   var projectedCents = toCents(balanceTotal()) + (draft.type === 'expense' ? -toCents(draft.amount) : toCents(draft.amount));
@@ -844,18 +807,14 @@ $('btn-confirm').addEventListener('click', function () {
   runRetentionCleanup();
   if (draft.type === 'income') { $('add-amount').value = '100'; $('inc-memo').value = ''; }
   else { $('exp-amount').value = ''; $('exp-memo').value = ''; }
-  var doneType = draft.type;
-  closeConfirm();
-  render();
-  toast((doneType === 'income' ? 'Income added.' : 'Expense added.') + (rolled ? ' Oldest record moved to Carried forward.' : ''));
+  return finish(closeConfirm, (draft.type === 'income' ? 'Income added.' : 'Expense added.') + (rolled ? ' Oldest record moved to Carried forward.' : ''));
 });
 
-/* ---- Copy: tap c for month, balance, income total, and every expense ---- */
 function buildMonthBalanceText() {
-  var ym = todayStr().slice(0, 7); // YYYY-MM
+  var ym = todayStr().slice(0, 7);
   var totInc = 0, totExp = 0, expLines = [];
   var i, r;
-  for (i = records.length - 1; i >= 0; i--) { // newest first, as shown in the ledger
+  for (i = records.length - 1; i >= 0; i--) {
     r = records[i];
     if (r.date.slice(0, 7) !== ym) continue;
     if (r.type === 'income') totInc += r.amount;
@@ -905,7 +864,6 @@ function doCopy(text, okMsg) {
 function copyMonthBalance() { doCopy(buildMonthBalanceText(), 'Month summary copied.'); }
 $('btn-copy').addEventListener('click', copyMonthBalance);
 
-/* ---- Backup: export downloads JSON, import uploads it back ---- */
 $('btn-export').addEventListener('click', function () {
   var blob = new Blob([JSON.stringify(makeSnapshot(), null, 2)], { type: 'application/json' });
   var url = URL.createObjectURL(blob);
@@ -932,7 +890,7 @@ $('file-import').addEventListener('change', function () {
     closeHelp();
     draft = { type: 'import', snap: snap };
     var snapCents = toCents(snap.opening) + toCents(snap.carry);
-    snap.records.forEach(function (r) { var a = toCents(r.amount, r.type === 'adjustment' ? MAX_MONEY * 2 : MAX_MONEY); snapCents += r.type === 'expense' ? -a : a; });
+    snap.records.forEach(function (r) { snapCents += signedCents(r); });
     openConfirm('Replace ALL current data with this backup?<br>' + snap.records.length +
       ' records · balance <b>' + esc(fmtMoney(fromCents(snapCents))) + '</b>');
   };
@@ -940,7 +898,6 @@ $('file-import').addEventListener('change', function () {
   reader.readAsText(f);
 });
 
-/* ---- Adjust balance: tap the balance number ---- */
 function openAdjust() {
   $('adjust-current').textContent = fmtMoney(balanceTotal());
   $('adjust-amount').value = '';
@@ -988,12 +945,10 @@ $('btn-adjust-confirm').addEventListener('click', function () {
   }
   autoBackup();
   runRetentionCleanup();
-  closeAdjust();
-  render();
-  toast('Balance adjusted.' + (rolledA ? ' Oldest record moved to Carried forward.' : ''));
+  finish(closeAdjust, 'Balance adjusted.' + (rolledA ? ' Oldest record moved to Carried forward.' : ''));
 });
 
-/* Another tab must never silently overwrite this tab's in-memory ledger. */
+/* Another tab must not silently overwrite this tab's ledger. */
 window.addEventListener('storage', function (e) {
   if ([LS_RECORDS, LS_OPENING, LS_CARRY].indexOf(e.key) !== -1) {
     crossTabConflict = true;
@@ -1020,7 +975,6 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-/* ---- Startup: clean old records, then render ---- */
 if (!storageBlocked) {
   if (bootRecordsP.missing) saveRecords(records);
   if (bootOpeningP.missing) saveOpening(opening);
