@@ -289,9 +289,16 @@ function fmtMoney(n) {
 }
 var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-function fmtDate(ds) {
+function fmtMonthDay(ds) {
   var p = String(ds).split('-');
-  return MONTHS_SHORT[parseInt(p[1], 10) - 1] + ' ' + parseInt(p[2], 10) + ', ' + p[0];
+  return MONTHS_SHORT[parseInt(p[1], 10) - 1] + ' ' + parseInt(p[2], 10);
+}
+function fmtDate(ds) {
+  return fmtMonthDay(ds) + ', ' + String(ds).split('-')[0];
+}
+function fmtDateLong(ds) {
+  var p = String(ds).split('-');
+  return MONTHS[parseInt(p[1], 10) - 1] + ' ' + parseInt(p[2], 10) + ', ' + p[0];
 }
 function monthTitleNow() {
   var d = new Date();
@@ -531,7 +538,9 @@ function ledgerModel() {
   return rows;
 }
 function render() {
-  $('st-month').textContent = monthTitleNow();
+  var lastDate = '';
+  records.forEach(function (r) { if (r.date > lastDate) lastDate = r.date; });
+  $('st-month').textContent = lastDate ? fmtDateLong(lastDate) : monthTitleNow();
   $('st-balance').textContent = fmtMoney(balanceTotal());
   $('sec-opening').style.display = openingSet ? 'none' : 'block';
   var list = $('ledger-list');
