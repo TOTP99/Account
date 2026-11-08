@@ -178,7 +178,7 @@
 <div class="sticker">
   <div class="tape"></div>
   <button type="button" class="st-corner" id="btn-exit" aria-label="Exit">Exit</button>
-  <button type="button" class="st-corner" id="btn-copy" aria-label="Copy month summary" title="Tap to copy month, balance, income and expense">c</button>
+  <button type="button" class="st-corner" id="btn-copy" aria-label="Copy month summary" title="Tap to copy month, balance, income and expense list">c</button>
   <button type="button" class="st-corner" id="btn-help" aria-label="About this sticker" title="Tap: help">?</button>
   <div class="sticker-scroll">
     <div class="st-month" id="st-month"></div>
@@ -649,12 +649,16 @@ function closeConfirm() {
   draft = null;
 }
 function failSave() { closeConfirm(); toast('Save failed. Please try again.', true); }
-function parseAmount(raw) {
+/* Clean a typed amount and return the number, or NaN when it is not a number at all (no limit check here). */
+function parseNumber(raw) {
   var t = String(raw).replace(/[\s\u00a0]/g, '').replace(/^\+/, '');
   if (/^-?\d+,\d{1,2}$/.test(t)) t = t.replace(',', '.');
   else t = t.replace(/,(?=\d{3}(\D|$))/g, '');
   if (!/^-?(\d+\.?\d*|\.\d+)$/.test(t)) return NaN;
-  var n = Number(t);
+  return Number(t);
+}
+function parseAmount(raw) {
+  var n = parseNumber(raw);
   if (!isFinite(n) || Math.abs(n) > MAX_MONEY) return NaN;
   var cents = toCents(n);
   if (cents === null) return NaN;
@@ -664,6 +668,11 @@ function parseEntryAmount(raw) {
   if (!raw) return null;
   var amount = parseAmount(raw);
   return (!isFinite(amount) || amount <= 0 || toCents(amount) === null) ? null : amount;
+}
+/* Error message for an unusable entry amount: over the limit gets the limit message, the rest get the greater-than-zero message. */
+function entryAmountError(raw) {
+  var n = parseNumber(raw);
+  return (n > 0) ? 'Enter a valid amount up to CA$2,000.' : 'Please enter an amount greater than zero.';
 }
 var lastSubmitKey = null, lastSubmitAt = 0;
 function dupGuard(key) {
@@ -689,7 +698,7 @@ $('btn-opening').addEventListener('click', function () {
 $('btn-add').addEventListener('click', function () {
   if (!canMutate()) return;
   var amount = parseEntryAmount($('add-amount').value.trim());
-  if (amount === null) { toast('Please enter an amount greater than zero.', true); return; }
+  if (amount === null) { toast(entryAmountError($('add-amount').value.trim()), true); return; }
   draft = { type: 'income', amount: amount, memo: $('inc-memo').value.trim() };
   openConfirm('Add income of <b>' + esc(fmtMoney(amount)) + '</b>' +
     (draft.memo ? '<br>Memo: ' + esc(draft.memo) : ''));
@@ -697,7 +706,7 @@ $('btn-add').addEventListener('click', function () {
 $('btn-expense').addEventListener('click', function () {
   if (!canMutate()) return;
   var amount = parseEntryAmount($('exp-amount').value.trim());
-  if (amount === null) { toast('Please enter an amount greater than zero.', true); return; }
+  if (amount === null) { toast(entryAmountError($('exp-amount').value.trim()), true); return; }
   draft = { type: 'expense', amount: amount, memo: $('exp-memo').value.trim() };
   openConfirm('Add expense of <b>' + esc(fmtMoney(amount)) + '</b>' +
     (draft.memo ? '<br>Memo: ' + esc(draft.memo) : ''));
@@ -841,21 +850,33 @@ $('btn-confirm').addEventListener('click', function () {
   toast((doneType === 'income' ? 'Income added.' : 'Expense added.') + (rolled ? ' Oldest record moved to Carried forward.' : ''));
 });
 
-/* ---- Copy: tap c for month, balance, and current-month totals ---- */
+/* ---- Copy: tap c for month, balance, income total, and every expense ---- */
 function buildMonthBalanceText() {
   var ym = todayStr().slice(0, 7); // YYYY-MM
-  var totInc = 0, totExp = 0;
-  records.forEach(function (r) {
-    if (r.date.slice(0, 7) !== ym) return;
+  var totInc = 0, totExp = 0, expLines = [];
+  var i, r;
+  for (i = records.length - 1; i >= 0; i--) { // newest first, as shown in the ledger
+    r = records[i];
+    if (r.date.slice(0, 7) !== ym) continue;
     if (r.type === 'income') totInc += r.amount;
-    else if (r.type === 'expense') totExp += r.amount;
-  });
-  return [
+    else if (r.type === 'expense') {
+      totExp += r.amount;
+      expLines.push(MONTHS_SHORT[Number(r.date.slice(5, 7)) - 1] + ' ' + Number(r.date.slice(8, 10)) + ' - ' + fmtMoney(r.amount));
+    }
+  }
+  var lines = [
     monthTitleNow(),
     'Balance: ' + fmtMoney(balanceTotal()),
-    'Income: ' + fmtMoney(totInc),
-    'Expense: ' + fmtMoney(totExp)
-  ].join('\n');
+    'Income: ' + fmtMoney(totInc)
+  ];
+  if (expLines.length) {
+    lines.push('Expense:');
+    lines = lines.concat(expLines);
+    lines.push('Total: ' + fmtMoney(totExp));
+  } else {
+    lines.push('Expense: ' + fmtMoney(0));
+  }
+  return lines.join('\n');
 }
 function fallbackCopy(text) {
   try {
