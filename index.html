@@ -283,6 +283,11 @@ function fmtMoney(n) {
 }
 /* Plain number, no currency sign (the Balance line shows "Balance 80.00"). */
 function fmtPlain(n) { return fmtMoney(n).replace(CURRENCY, ''); }
+/* Total without ".00" when whole ("Total: 175"). */
+function fmtTotal(n) {
+  var s = fmtPlain(n);
+  return s.slice(-3) === '.00' ? s.slice(0, -3) : s;
+}
 var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 function fmtMonthDay(ds) {
@@ -812,15 +817,23 @@ $('btn-confirm').addEventListener('click', function () {
 function buildMonthBalanceText() {
   var ym = todayStr().slice(0, 7);
   var ld = lastModifiedDate();
-  var lines = [ld ? fmtDateLong(ld) : monthTitleNow(), 'Balance ' + fmtPlain(balanceTotal())];
+  var lines = [ld ? fmtDateLong(ld) : monthTitleNow(), 'Balance ' + fmtPlain(balanceTotal()), ''];
+  var incLines = [], expLines = [], totExp = 0;
   var i, r;
   for (i = records.length - 1; i >= 0; i--) {
     r = records[i];
     if (r.date.slice(0, 7) !== ym) continue;
-    if (r.type !== 'income' && r.type !== 'expense') continue;
-    lines.push(fmtDate(r.date) + ' · ' + typeLabel(r.type));
-    lines.push(signedAmount(r));
+    if (r.type === 'income') incLines.push(fmtMonthDay(r.date) + '- ' + fmtPlain(r.amount));
+    else if (r.type === 'expense') {
+      totExp += r.amount;
+      expLines.push(fmtMonthDay(r.date) + '- ' + fmtPlain(r.amount));
+    }
   }
+  lines.push('Income:');
+  lines = lines.concat(incLines);
+  lines.push('');
+  lines.push('Expense: Total: ' + fmtTotal(totExp));
+  lines = lines.concat(expLines);
   return lines.join('\n');
 }
 function fallbackCopy(text) {
