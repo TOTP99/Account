@@ -261,7 +261,7 @@
 
 function $(id) { return document.getElementById(id); }
 /* Bump on every release; shown on the sticker and in the tab title so a stale cached copy is obvious. */
-var APP_VERSION = 'v30';
+var APP_VERSION = 'v33';
 document.title = 'Personal ledger · Offline ' + APP_VERSION;
 $('st-ver').textContent = APP_VERSION;
 function esc(s) {
@@ -543,7 +543,10 @@ function render() {
   $('sec-opening').style.display = openingSet ? 'none' : 'block';
   var list = $('ledger-list');
   list.innerHTML = '';
-  var rows = ledgerModel().reverse(); /* newest first */
+  var ym = todayStr().slice(0, 7);
+  var rows = ledgerModel().reverse().filter(function (row) {
+    return row.kind === 'carry' || row.rec.date.slice(0, 7) === ym;
+  }); /* newest first, this month only */
   if (!rows.length) {
     list.innerHTML = '<div class="small">No records yet.</div>';
     return;
